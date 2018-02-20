@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+	<t t-name="SaleOrderButton">
+        <div class='control-button js_saleorder'>
+        	<t t-if="widget.pos.config.sale_order_operations == 'confirm'">
+                <i class='fa fa-tag' /> Create Sales Order
+            </t>
+            <t t-if="widget.pos.config.sale_order_operations == 'draft'">
+                <i class='fa fa-tag' /> Create Quotation
+            </t>
+        </div>
+    </t>
+     <t t-name="SaleOrderPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-textinput" style="height: 203px;">
+                <p class="title">Confirmation</p>
+                <t t-if="widget.pos.config.sale_order_operations == 'confirm'">
+                    Sales Order Created: 
+                </t>
+                <t t-if="widget.pos.config.sale_order_operations == 'draft'">
+                    Quotation Created:
+                </t>
+                <a style= "color:blue;" target="blank" t-att-href="widget.options.url"><t t-esc="widget.options.name"/></a>
+                <div class="footer">
+                    <div class="button cancel">
+                        OK
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+	<t t-extend="PaymentScreenWidget">
+        <t t-jquery="div.top-content span.next" t-operation="before">
+            <t t-if="widget.pos.config.sale_order_operations == 'paid'">
+                <span class='button create_so' id= "btn_so" style="right:0px;margin-right: 160px;">
+                    Create Sale Order
+                    <i class='fa fa-angle-double-right'></i>
+                </span>
+            </t>
+        </t>
+    </t>
+    
+	<t t-extend="PosTicket">
+		<t t-jquery="[t-esc='order.name']" t-operation="replace">
+			<t t-esc="order.get_sale_order_name() || order.name" />
+		</t>
+	</t>
+	<t t-extend="XmlReceipt">
+		<t t-jquery="[t-esc='receipt.name']" t-operation="replace">
+			<t t-esc="receipt.sale_order_name || receipt.name" />
+		</t>
+	</t>
+</templates>
